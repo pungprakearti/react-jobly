@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import ErrorHandler from './ErrorHandler';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import './SignUpForm.css';
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -43,45 +45,56 @@ class SignUpForm extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="username">Username: </label>
-          <input
-            type="text"
-            value={this.state.username}
-            name="username"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Password: </label>
-          <input
-            type="password"
-            value={this.state.password}
-            name="password"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="first_name">First Name: </label>
-          <input
-            type="text"
-            value={this.state.first_name}
-            name="first_name"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="last_name">Last Name: </label>
-          <input
-            type="text"
-            value={this.state.last_name}
-            name="last_name"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="email">Email: </label>
-          <input
-            type="email"
-            value={this.state.email}
-            name="email"
-            onChange={this.handleChange}
-          />
-          <button>Submit</button>
-        </form>
+      <div className="SignUpForm">
+        <Form onSubmit={this.handleSubmit} className="SignUpForm-form">
+          <FormGroup className="row">
+            <Label htmlFor="username">Username: </Label>
+            <Input
+              type="text"
+              value={this.state.username}
+              name="username"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="row">
+            <Label htmlFor="password">Password: </Label>
+            <Input
+              type="password"
+              value={this.state.password}
+              name="password"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="row">
+            <Label htmlFor="first_name">First Name: </Label>
+            <Input
+              type="text"
+              value={this.state.first_name}
+              name="first_name"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="row">
+            <Label htmlFor="last_name">Last Name: </Label>
+            <Input
+              type="text"
+              value={this.state.last_name}
+              name="last_name"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="row">
+            <Label htmlFor="email">Email: </Label>
+            <Input
+              type="email"
+              value={this.state.email}
+              name="email"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <Button className="SignUpForm-button">Submit</Button>
+        </Form>
+
         {this.state.error !== '' ? (
           <ErrorHandler error={this.state.error} />
         ) : (

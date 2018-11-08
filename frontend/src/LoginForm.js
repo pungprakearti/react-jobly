@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import ErrorHandler from './ErrorHandler';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import './LoginForm.css';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -40,24 +42,30 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="username">Username: </label>
-          <input
-            type="text"
-            value={this.state.username}
-            name="username"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Password: </label>
-          <input
-            type="password"
-            value={this.state.password}
-            name="password"
-            onChange={this.handleChange}
-          />
-          <button>Submit</button>
-        </form>
+      <div className="LoginForm">
+        <Form onSubmit={this.handleSubmit} className="LoginForm-form">
+          <FormGroup className="row">
+            <Label htmlFor="username">Username: </Label>
+            <Input
+              className="LoginForm-input"
+              type="text"
+              value={this.state.username}
+              name="username"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <FormGroup className="row">
+            <Label htmlFor="password">Password: </Label>
+            <Input
+              className="LoginForm-input"
+              type="password"
+              value={this.state.password}
+              name="password"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+          <Button className="LoginForm-button">Submit</Button>
+        </Form>
         {this.state.error.length > 0 ? (
           <ErrorHandler error={this.state.error} />
         ) : (

@@ -1,0 +1,42 @@
+.Login {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: relative;
+}
+
+.Login::after {
+  content: '';
+  background: url('https://images.pexels.com/photos/1056553/pexels-photo-1056553.jpeg?h=2000');
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.Login-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10%;
+}
+
+.Login-button.btn.btn-secondary {
+  background-color: #45a29e;
+  color: #66fcf1;
+  border: 1px solid #45a29e;
+}
+
+.Login-button.btn.btn-secondary.Login-button-active:hover {
+  background-color: #66fcf1;
+  color: #0b0c10;
+}
+
+.Login-button-group {
+  margin-left: 200px;
+}

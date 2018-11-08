@@ -1,0 +1,27 @@
+.LoginForm-form {
+  display: inline-block;
+  margin-top: 125px;
+}
+
+.LoginForm {
+  margin: auto;
+  border-radius: 5px;
+  width: 500px;
+  height: 500px;
+  background-color: rgba(31, 40, 51, 0.65);
+}
+
+.LoginForm-input {
+  margin-bottom: 25px;
+}
+
+.LoginForm-button.btn.btn-secondary {
+  background-color: rgba(0, 0, 0, 0);
+  color: #66fcf1;
+  border: 1px solid #45a29e;
+}
+
+.LoginForm-button.btn.btn-secondary:hover {
+  background-color: #66fcf1;
+  color: #0b0c10;
+}
