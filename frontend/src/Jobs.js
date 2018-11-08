@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
+import JobCard from './JobCard';
 
 class Jobs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       jobs: [],
-      resultJobs: [],
       search: ''
     };
     this.handleChange = this.handleChange.bind(this);
@@ -14,9 +14,10 @@ class Jobs extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  /** get all jobs */
   async componentDidMount() {
     let jobs = await JoblyApi.getJobs();
-    this.setState({ jobs, resultJobs: jobs });
+    this.setState({ jobs });
   }
 
   handleChange(evt) {
@@ -25,13 +26,10 @@ class Jobs extends Component {
     });
   }
 
-  handleSearch() {
-    console.log(this.state.search);
-    this.setState({
-      resultJobs: this.state.jobs.filter(job =>
-        job.title.toLowerCase().includes(this.state.search.toLowerCase())
-      )
-    });
+  /** search for jobs */
+  async handleSearch() {
+    let jobs = await JoblyApi.getJobs(this.state.search);
+    this.setState({ jobs });
   }
 
   async handleClick(id) {
@@ -56,17 +54,9 @@ class Jobs extends Component {
         />
         <button onClick={this.handleSearch}>Search</button>
         <ul>
-          {this.state.resultJobs.map(job => (
+          {this.state.jobs.map(job => (
             <li>
-              <h4>{job.title}</h4>
-              <p>Salary: {job.salary}</p>
-              <p>Equity: {job.equity}</p>
-              <button
-                onClick={() => this.handleClick(job.id)}
-                disabled={job.state === 'applied'}
-              >
-                {job.state === 'applied' ? 'Applied' : 'Apply'}
-              </button>
+              <JobCard job={job} handleClick={this.handleClick} />
             </li>
           ))}
         </ul>

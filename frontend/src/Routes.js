@@ -4,9 +4,9 @@ import Home from './Home';
 import Companies from './Companies';
 import Company from './Company';
 import Jobs from './Jobs';
-// import Login from './Login';
-// import Profile from './Profile';
-// import NavBar from './NavBar';
+import Login from './Login';
+import Profile from './Profile';
+import NavBar from './NavBar';
 import JoblyApi from './JoblyApi';
 
 class Routes extends Component {
@@ -30,7 +30,7 @@ class Routes extends Component {
   render() {
     return (
       <div>
-        {/* <NavBar /> */}
+        <NavBar />
         <Switch>
           <Route exact path="/" render={() => <Home />} />
           <Route exact path="/companies" render={() => <Companies />} />
@@ -40,8 +40,8 @@ class Routes extends Component {
             render={props => <Company {...props} />}
           />
           <Route exact path="/jobs" render={() => <Jobs />} />
-          {/*<Route exact path="/login" render={() => <Login />} />
-          <Route exact path="/profile" render={() => <Profile />} /> */}
+          <Route exact path="/login" render={props => <Login {...props} />} />
+          <Route exact path="/profile" render={() => <Profile />} />
         </Switch>
       </div>
     );

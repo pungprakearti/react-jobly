@@ -38,13 +38,13 @@ class JoblyApi {
     return res.company;
   }
 
-  static async getCompanies() {
-    let res = await this.request(`companies`);
+  static async getCompanies(search = '') {
+    let res = await this.request(`companies?search=${search}`);
     return res.companies;
   }
 
-  static async getJobs() {
-    let res = await this.request('jobs');
+  static async getJobs(search = '') {
+    let res = await this.request(`jobs?search=${search}`);
     return res.jobs;
   }
 
@@ -55,6 +55,26 @@ class JoblyApi {
       'post'
     );
     return res.message;
+  }
+
+  static async signUp(userData) {
+    let res = await this.request('users', userData, 'post');
+    return res.token;
+  }
+
+  static async login(loginData) {
+    let res = await this.request('login', loginData, 'post');
+    return res.token;
+  }
+
+  static async getUser(username) {
+    let res = await this.request(`users/${username}`);
+    return res.user;
+  }
+
+  static async updateUser(userData, username) {
+    let res = await this.request(`users/${username}`, userData, 'patch');
+    return res.user;
   }
 }
 

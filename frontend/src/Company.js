@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
+import JobCard from './JobCard';
 
 class Company extends Component {
   constructor(props) {
@@ -11,26 +12,25 @@ class Company extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  /** get default jobs available from company */
+  async componentDidMount() {
+    let company = await JoblyApi.getCompany(this.props.match.params.handle);
+    this.setState({
+      jobs: company.jobs,
+      company
+    });
+  }
+
+  /** search jobs */
   async handleClick(id) {
     await JoblyApi.apply(id);
     let jobIdx = this.state.jobs.findIndex(job => job.id === id);
     let job = this.state.jobs[jobIdx];
     job.state = 'applied';
+    console.log(job);
     this.setState(st => ({
       jobs: [...st.jobs.slice(0, jobIdx), job, ...st.jobs.slice(jobIdx + 1)]
     }));
-  }
-
-  async componentDidMount() {
-    let jobs = await JoblyApi.getJobs();
-    let company = await JoblyApi.getCompany(this.props.match.params.handle);
-    jobs = jobs.filter(
-      job => job.company_handle === this.props.match.params.handle
-    );
-    this.setState({
-      jobs,
-      company
-    });
   }
 
   render() {
@@ -41,15 +41,7 @@ class Company extends Component {
         <ul>
           {this.state.jobs.map(job => (
             <li>
-              <h4>{job.title}</h4>
-              <p>Salary: {job.salary}</p>
-              <p>Equity: {job.equity}</p>
-              <button
-                onClick={() => this.handleClick(job.id)}
-                disabled={job.state === 'applied'}
-              >
-                {job.state === 'applied' ? 'Applied' : 'Apply'}
-              </button>
+              <JobCard job={job} handleClick={this.handleClick} />
             </li>
           ))}
         </ul>

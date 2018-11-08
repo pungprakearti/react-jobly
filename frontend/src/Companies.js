@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import { Link } from 'react-router-dom';
-import slugify from 'slugify';
+import CompanyCard from './CompanyCard';
 
 class Companies extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      companies: [],
-      resultCompanies: []
+      companies: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -21,19 +20,17 @@ class Companies extends Component {
     });
   }
 
+  /** get all companies as default */
   async componentDidMount() {
     let companies = await JoblyApi.getCompanies();
-    this.setState({
-      companies,
-      resultCompanies: companies
-    });
+    this.setState({ companies });
   }
 
-  handleClick(evt) {
+  /** search for companies */
+  async handleClick(evt) {
+    let companies = await JoblyApi.getCompanies(this.state.search);
     this.setState({
-      resultCompanies: this.state.companies.filter(company =>
-        company.name.toLowerCase().includes(this.state.search.toLowerCase())
-      )
+      companies
     });
   }
 
@@ -49,12 +46,10 @@ class Companies extends Component {
         />
         <button onClick={this.handleClick}>Search</button>
         <ul>
-          {this.state.resultCompanies.map(company => (
-            <Link to={`/companies/${slugify(company.name.toLowerCase())}`}>
+          {this.state.companies.map(company => (
+            <Link to={`/companies/${company.handle}`}>
               <li>
-                {company.name}
-                {company.description}
-                <img src={company.logo_url} alt="Company" />
+                <CompanyCard company={company} />
               </li>
             </Link>
           ))}

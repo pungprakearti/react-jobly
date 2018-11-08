@@ -1,9 +1,7 @@
 /** Convenience middleware to handle common auth cases in routes. */
 
-
-const jwt = require("jsonwebtoken");
-const {SECRET} = require("../config");
-
+const jwt = require('jsonwebtoken');
+const { SECRET } = require('../config');
 
 /** Middleware to use when they must provide a valid token.
  *
@@ -16,19 +14,16 @@ const {SECRET} = require("../config");
 function authRequired(req, res, next) {
   try {
     const tokenStr = req.body._token || req.query._token;
-    console.log("tokenSt", tokenStr);
+    console.log('tokenSt', tokenStr);
     let token = jwt.verify(tokenStr, SECRET);
     req.username = token.username;
     return next();
-  }
-
-  catch (err) {
-    let unauthorized = new Error("You must authenticate first.");
-    unauthorized.status = 401;  // 401 Unauthorized
+  } catch (err) {
+    let unauthorized = new Error('You must authenticate first.');
+    unauthorized.status = 401; // 401 Unauthorized
     return next(unauthorized);
   }
 }
-
 
 /** Middleware to use when they must provide a valid token that is an admin token.
  *
@@ -51,16 +46,13 @@ function adminRequired(req, res, next) {
 
     // throw an error, so we catch it in our catch, below
     throw new Error();
-  }
-
-  catch (err) {
-    const unauthorized = new Error("You must be an admin to access.");
+  } catch (err) {
+    const unauthorized = new Error('You must be an admin to access.');
     unauthorized.status = 401;
 
     return next(unauthorized);
   }
 }
-
 
 /** Middleware to use when they must provide a valid token & be user matching
  *  username provided as route param.
@@ -74,29 +66,25 @@ function adminRequired(req, res, next) {
 function ensureCorrectUser(req, res, next) {
   try {
     const tokenStr = req.body._token || req.query._token;
-
     let token = jwt.verify(tokenStr, SECRET);
     req.username = token.username;
-
+    console.log(req.params.username);
     if (token.username === req.params.username) {
       return next();
     }
 
     // throw an error, so we catch it in our catch, below
     throw new Error();
-  }
-
-  catch (e) {
-    const unauthorized = new Error("You are not authorized.");
+  } catch (e) {
+    const unauthorized = new Error('You are not authorized.');
     unauthorized.status = 401;
 
     return next(unauthorized);
   }
 }
 
-
 module.exports = {
   authRequired,
   adminRequired,
-  ensureCorrectUser,
+  ensureCorrectUser
 };
