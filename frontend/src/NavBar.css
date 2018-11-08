@@ -1,0 +1,20 @@
+.NavBar-custom {
+  background-color: #1f2833;
+}
+
+.NavBar-link {
+  color: #45a29e;
+  transition: all 0.25s ease-in-out;
+  margin-left: 50px;
+}
+
+.NavBar-link:hover {
+  text-decoration: none;
+  color: #66fcf1;
+  transition: all 0.25s ease-in-out;
+}
+
+.NavBar-link-home {
+  font-weight: bold;
+  font-family: 'Abril Fatface', cursive;
+}

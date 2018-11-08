@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import './Home.css';
 
 class Home extends Component {
   render() {
     return (
-      <div>
-        <h1>Jobly</h1>
-        <p>All the jobs in one, convenient place.</p>
-        <h2>Welcome Back!</h2>
+      <div className="Home">
+        <div className="Home-text">
+          <h1 className="Home-header">jobly</h1>
+          <p>All the jobs in one, convenient place.</p>
+          <h2>Welcome Back!</h2>
+        </div>
       </div>
     );
   }

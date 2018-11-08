@@ -24,7 +24,6 @@ class Routes extends Component {
   async componentDidMount() {
     try {
       let token = localStorage.getItem('token');
-      //debugger;
       if (token) {
         await this.setCurrUser(token);
       }

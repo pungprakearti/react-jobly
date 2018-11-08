@@ -1,0 +1,33 @@
+.Home {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: relative;
+}
+
+.Home::after {
+  content: '';
+  background: url('https://images.pexels.com/photos/1124062/pexels-photo-1124062.jpeg?h=2000');
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.Home-text {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+}
+
+.Home-header {
+  font-family: 'Abril Fatface', cursive;
+  font-size: 75px;
+  margin-bottom: 50px;
+}
