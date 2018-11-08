@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
 class NavBar extends Component {
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.currUser !== this.props.currUser) {
+  //     this.setState({
+  //       currUser: this.props.currUser
+  //     });
+  //   }
+  // }
+
   render() {
     let loggedInBar = (
       <div>
@@ -9,7 +17,9 @@ class NavBar extends Component {
         <NavLink to="/companies">Companies</NavLink>
         <NavLink to="/jobs">Jobs</NavLink>
         <NavLink to="/profile">Profile</NavLink>
-        <NavLink to="/">Log out</NavLink>
+        <NavLink onClick={() => this.props.setCurrUser()} to="/">
+          Log out
+        </NavLink>
       </div>
     );
 

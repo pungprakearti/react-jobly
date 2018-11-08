@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 class JobCard extends Component {
   render() {
-    console.log(this.props.job);
     return (
       <div>
         <h4>{this.props.job.title}</h4>

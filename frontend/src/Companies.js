@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import { Link } from 'react-router-dom';
 import CompanyCard from './CompanyCard';
+import ErrorHandler from './ErrorHandler';
 
 class Companies extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      companies: []
+      companies: [],
+      error: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -22,19 +24,34 @@ class Companies extends Component {
 
   /** get all companies as default */
   async componentDidMount() {
-    let companies = await JoblyApi.getCompanies();
-    this.setState({ companies });
+    try {
+      let companies = await JoblyApi.getCompanies();
+      this.setState({ companies });
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   /** search for companies */
   async handleClick(evt) {
-    let companies = await JoblyApi.getCompanies(this.state.search);
-    this.setState({
-      companies
-    });
+    try {
+      let companies = await JoblyApi.getCompanies(this.state.search);
+      this.setState({
+        companies
+      });
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   render() {
+    if (this.state.error.length) {
+      return <ErrorHandler error={this.state.error} />;
+    }
     return (
       <div>
         <input
@@ -47,7 +64,7 @@ class Companies extends Component {
         <button onClick={this.handleClick}>Search</button>
         <ul>
           {this.state.companies.map(company => (
-            <Link to={`/companies/${company.handle}`}>
+            <Link key={company.handle} to={`/companies/${company.handle}`}>
               <li>
                 <CompanyCard company={company} />
               </li>

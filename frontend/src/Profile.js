@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import jwt from 'jsonwebtoken';
 import JoblyApi from './JoblyApi';
+import ErrorHandler from './ErrorHandler';
 
 class Profile extends Component {
   constructor(props) {
@@ -12,17 +13,24 @@ class Profile extends Component {
       email: '',
       photo_url: '',
       password: '',
-      _token: ''
+      _token: '',
+      error: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
-    let payload = jwt.decode(localStorage.getItem('token'));
-    let user = await JoblyApi.getUser(payload.username);
-    user._token = localStorage.getItem('token');
-    this.setState(st => ({ ...st, ...user }));
+    try {
+      let payload = jwt.decode(localStorage.getItem('token'));
+      let user = await JoblyApi.getUser(payload.username);
+      user._token = localStorage.getItem('token');
+      this.setState(st => ({ ...st, ...user }));
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   handleChange(evt) {
@@ -32,10 +40,19 @@ class Profile extends Component {
   }
 
   async handleSubmit(evt) {
-    evt.preventDefault();
-    let { username, jobs, ...userData } = this.state;
-    let user = await JoblyApi.updateUser(userData, username);
-    this.setState(st => ({ ...st, ...user }));
+    try {
+      this.setState({
+        error: []
+      });
+      evt.preventDefault();
+      let { username, jobs, error, ...userData } = this.state;
+      let user = await JoblyApi.updateUser(userData, username);
+      this.setState(st => ({ ...st, ...user }));
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   render() {
@@ -81,6 +98,11 @@ class Profile extends Component {
           />
           <button>Save Changes</button>
         </form>
+        {this.state.error !== '' ? (
+          <ErrorHandler error={this.state.error} />
+        ) : (
+          ''
+        )}
       </div>
     );
   }

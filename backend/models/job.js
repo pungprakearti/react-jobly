@@ -1,15 +1,12 @@
-const db = require("../db");
-const sqlForPartialUpdate = require("../helpers/partialUpdate");
-
+const db = require('../db');
+const sqlForPartialUpdate = require('../helpers/partialUpdate');
 
 /** Related functions for companies. */
 
 class Job {
-
   /** Find all jobs (can filter on terms in data). */
 
   static async findAll(data, username) {
-    console.log(data);
     let baseQuery = `
       SELECT id, title, company_handle, salary, equity, a.state 
       FROM jobs 
@@ -36,12 +33,12 @@ class Job {
     }
 
     if (whereExpressions.length > 0) {
-      baseQuery += " WHERE ";
+      baseQuery += ' WHERE ';
     }
 
     // Finalize query and return results
 
-    let finalQuery = baseQuery + whereExpressions.join(" AND ");
+    let finalQuery = baseQuery + whereExpressions.join(' AND ');
     const jobsRes = await db.query(finalQuery, queryValues);
     return jobsRes.rows;
   }
@@ -50,24 +47,25 @@ class Job {
 
   static async findOne(id) {
     const jobRes = await db.query(
-        `SELECT id, title, salary, equity, company_handle 
+      `SELECT id, title, salary, equity, company_handle 
              FROM jobs 
              WHERE id = $1`,
-        [id]);
+      [id]
+    );
 
     const job = jobRes.rows[0];
 
     if (!job) {
       const error = new Error(`There exists no job '${id}'`);
-      error.status = 404;   // 404 NOT FOUND
+      error.status = 404; // 404 NOT FOUND
       throw error;
     }
 
     const companiesRes = await db.query(
-        `SELECT name, num_employees, description, logo_url 
+      `SELECT name, num_employees, description, logo_url 
           FROM companies 
           WHERE handle = $1`,
-        [job.company_handle]
+      [job.company_handle]
     );
 
     job.company = companiesRes.rows[0];
@@ -79,10 +77,10 @@ class Job {
 
   static async create(data) {
     const result = await db.query(
-        `INSERT INTO jobs (title, salary, equity, company_handle) 
+      `INSERT INTO jobs (title, salary, equity, company_handle) 
              VALUES ($1, $2, $3, $4) 
              RETURNING id, title, salary, equity, company_handle`,
-        [data.title, data.salary, data.equity, data.company_handle]
+      [data.title, data.salary, data.equity, data.company_handle]
     );
 
     return result.rows[0];
@@ -98,12 +96,7 @@ class Job {
    */
 
   static async update(id, data) {
-    let {query, values} = sqlForPartialUpdate(
-        "jobs",
-        data,
-        "id",
-        id
-    );
+    let { query, values } = sqlForPartialUpdate('jobs', data, 'id', id);
 
     const result = await db.query(query, values);
     const job = result.rows[0];
@@ -121,10 +114,11 @@ class Job {
 
   static async remove(id) {
     const result = await db.query(
-        `DELETE FROM jobs 
+      `DELETE FROM jobs 
             WHERE id = $1 
             RETURNING id`,
-        [id]);
+      [id]
+    );
 
     if (result.rows.length === 0) {
       let notFound = new Error(`There exists no job '${id}`);
@@ -136,24 +130,25 @@ class Job {
   /** Apply for job: update db, returns undefined. */
 
   static async apply(id, username, state) {
-      const result = await db.query(
-          `SELECT id 
+    const result = await db.query(
+      `SELECT id 
             FROM jobs 
             WHERE id = $1`,
-          [id]);
+      [id]
+    );
 
-      if (result.rows.length === 0) {
-        let notFound = new Error(`There exists no job '${id}`);
-        notFound.status = 404;
-        throw notFound;
-      }
+    if (result.rows.length === 0) {
+      let notFound = new Error(`There exists no job '${id}`);
+      notFound.status = 404;
+      throw notFound;
+    }
 
-      await db.query(
-          `INSERT INTO applications (job_id, username, state) 
+    await db.query(
+      `INSERT INTO applications (job_id, username, state) 
             VALUES ($1, $2, $3)`,
-          [id, username, state]);
+      [id, username, state]
+    );
   }
 }
-
 
 module.exports = Job;

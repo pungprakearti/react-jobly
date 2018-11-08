@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
+import ErrorHandler from './ErrorHandler';
 
 class Jobs extends Component {
   constructor(props) {
     super(props);
     this.state = {
       jobs: [],
-      search: ''
+      search: '',
+      error: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -16,8 +18,14 @@ class Jobs extends Component {
 
   /** get all jobs */
   async componentDidMount() {
-    let jobs = await JoblyApi.getJobs();
-    this.setState({ jobs });
+    try {
+      let jobs = await JoblyApi.getJobs();
+      this.setState({ jobs });
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   handleChange(evt) {
@@ -28,21 +36,36 @@ class Jobs extends Component {
 
   /** search for jobs */
   async handleSearch() {
-    let jobs = await JoblyApi.getJobs(this.state.search);
-    this.setState({ jobs });
+    try {
+      let jobs = await JoblyApi.getJobs(this.state.search);
+      this.setState({ jobs });
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   async handleClick(id) {
-    await JoblyApi.apply(id);
-    let jobIdx = this.state.jobs.findIndex(job => job.id === id);
-    let job = this.state.jobs[jobIdx];
-    job.state = 'applied';
-    this.setState(st => ({
-      jobs: [...st.jobs.slice(0, jobIdx), job, ...st.jobs.slice(jobIdx + 1)]
-    }));
+    try {
+      await JoblyApi.apply(id);
+      let jobIdx = this.state.jobs.findIndex(job => job.id === id);
+      let job = this.state.jobs[jobIdx];
+      job.state = 'applied';
+      this.setState(st => ({
+        jobs: [...st.jobs.slice(0, jobIdx), job, ...st.jobs.slice(jobIdx + 1)]
+      }));
+    } catch (err) {
+      this.setState(st => ({
+        error: [...st.error, ...err]
+      }));
+    }
   }
 
   render() {
+    if (this.state.error.length > 0) {
+      return <ErrorHandler error={this.state.error} />;
+    }
     return (
       <div>
         <input
@@ -55,7 +78,7 @@ class Jobs extends Component {
         <button onClick={this.handleSearch}>Search</button>
         <ul>
           {this.state.jobs.map(job => (
-            <li>
+            <li key={job.id}>
               <JobCard job={job} handleClick={this.handleClick} />
             </li>
           ))}

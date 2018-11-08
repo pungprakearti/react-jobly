@@ -20,9 +20,15 @@ class Login extends Component {
         <button onClick={() => this.handleLogin(true)}>Login</button>
         <button onClick={() => this.handleLogin(false)}>Sign Up</button>
         {this.state.login ? (
-          <LoginForm history={this.props.history} />
+          <LoginForm
+            setCurrUser={this.props.setCurrUser}
+            history={this.props.history}
+          />
         ) : (
-          <SignUpForm history={this.props.history} />
+          <SignUpForm
+            setCurrUser={this.props.setCurrUser}
+            history={this.props.history}
+          />
         )}
       </div>
     );
