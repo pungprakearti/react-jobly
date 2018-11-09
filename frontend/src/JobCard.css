@@ -1,0 +1,35 @@
+.JobCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(31, 40, 51, 0.65);
+  border-radius: 5px;
+  padding: 10px;
+  width: 400px;
+  height: 150px;
+}
+
+.JobCard-button {
+  display: block;
+}
+
+.JobCard-se {
+  display: flex;
+  justify-content: space-around;
+}
+
+.JobCard-button.btn.btn-secondary {
+  background-color: rgba(0, 0, 0, 0);
+  color: #66fcf1;
+  border: 1px solid #45a29e;
+}
+
+#JobCard-active {
+  background-color: rgba(69, 162, 158, 0.5);
+  color: #66fcf1;
+}
+
+#JobCard-active:hover {
+  background-color: #66fcf1;
+  color: #0b0c10;
+}

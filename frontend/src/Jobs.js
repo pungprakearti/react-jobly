@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
 import ErrorHandler from './ErrorHandler';
+import { ListGroup, ListGroupItem, Button, Input } from 'reactstrap';
+
+import './Jobs.css';
 
 class Jobs extends Component {
   constructor(props) {
@@ -67,22 +70,27 @@ class Jobs extends Component {
       return <ErrorHandler error={this.state.error} />;
     }
     return (
-      <div>
-        <input
-          type="text"
-          value={this.state.search}
-          name="search"
-          placeholder="Enter search term.."
-          onChange={this.handleChange}
-        />
-        <button onClick={this.handleSearch}>Search</button>
-        <ul>
+      <div className="Jobs">
+        <div className="Jobs-content">
+          <div className="Jobs-search row text-center">
+            <Input
+              type="text"
+              value={this.state.search}
+              name="search"
+              placeholder="Enter search term.."
+              onChange={this.handleChange}
+              className="Jobs-input"
+            />
+            <Button onClick={this.handleSearch} id="Jobs-search-button">
+              Search
+            </Button>
+          </div>
           {this.state.jobs.map(job => (
-            <li key={job.id}>
+            <div key={job.id} className="Jobs-item">
               <JobCard job={job} handleClick={this.handleClick} />
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     );
   }
