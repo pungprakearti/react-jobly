@@ -39,9 +39,8 @@
 .Jobs-content {
   display: inline-block;
   margin-top: 100px;
-}
-
-#Jobs-search-button {
+  min-height: 100vh;
+  height: 100%;
 }
 
 #Jobs-search-button {

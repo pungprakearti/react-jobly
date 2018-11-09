@@ -1,0 +1,19 @@
+.CompanyCard-logo {
+  width: 75px;
+}
+.CompanyCard-logo-container {
+  margin: auto;
+}
+
+.CompanyCard-desc {
+  height: 100px;
+  margin-top: 10px;
+  text-align: left;
+  text-indent: 20px;
+  color: #5addd4;
+}
+
+.CompanyCard-name {
+  font-size: 20px;
+  color: #66fcf1;
+}

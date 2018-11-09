@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
 import ErrorHandler from './ErrorHandler';
-import { ListGroup, ListGroupItem, Button, Input } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 
 import './Jobs.css';
 
@@ -85,11 +85,15 @@ class Jobs extends Component {
               Search
             </Button>
           </div>
-          {this.state.jobs.map(job => (
-            <div key={job.id} className="Jobs-item">
-              <JobCard job={job} handleClick={this.handleClick} />
-            </div>
-          ))}
+          {this.state.jobs.length ? (
+            this.state.jobs.map(job => (
+              <div key={job.id} className="Jobs-item">
+                <JobCard job={job} handleClick={this.handleClick} />
+              </div>
+            ))
+          ) : (
+            <h1>No Jobs Found</h1>
+          )}
         </div>
       </div>
     );

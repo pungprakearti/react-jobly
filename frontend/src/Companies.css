@@ -1,0 +1,64 @@
+.Companies-link:hover {
+  text-decoration: none;
+}
+
+.Companies-list-item.list-group-item {
+  background-color: rgba(31, 40, 51, 0.65);
+}
+
+.Companies-list-item.list-group-item:hover {
+  background-color: #45a29e;
+}
+
+.Companies {
+  width: 100vw;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+.Companies::after {
+  content: '';
+  background: url('https://images.pexels.com/photos/34092/pexels-photo.jpg?h=2000');
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#Companies-search-button {
+  background-color: rgba(69, 162, 158, 0.85);
+  color: #66fcf1;
+}
+
+#Companies-search-button:hover {
+  background-color: #66fcf1;
+  color: #0b0c10;
+}
+
+.Companies-search {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.Companies-input.form-control {
+  width: 400px;
+}
+
+.Companies-content {
+  display: inline-block;
+  margin-top: 100px;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.Companies-list {
+  width: 700px;
+}
