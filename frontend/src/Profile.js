@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import jwt from 'jsonwebtoken';
 import JoblyApi from './JoblyApi';
 import ErrorHandler from './ErrorHandler';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import Loading from './Loading';
+import './Profile.css';
 
 class Profile extends Component {
   constructor(props) {
@@ -14,7 +17,9 @@ class Profile extends Component {
       photo_url: '',
       password: '',
       _token: '',
-      error: []
+      error: [],
+      loading: true,
+      modified: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,10 +30,12 @@ class Profile extends Component {
       let payload = jwt.decode(localStorage.getItem('token'));
       let user = await JoblyApi.getUser(payload.username);
       user._token = localStorage.getItem('token');
-      this.setState(st => ({ ...st, ...user }));
+      this.setState(st => ({ ...st, ...user, loading: false }));
     } catch (err) {
       this.setState(st => ({
-        error: [...st.error, ...err]
+        error: Array.isArray(err)
+          ? [...st.error, ...err]
+          : [...st.error, err.message]
       }));
     }
   }
@@ -42,13 +49,22 @@ class Profile extends Component {
   async handleSubmit(evt) {
     try {
       this.setState({
-        error: []
+        error: [],
+        modified: false
       });
       evt.preventDefault();
-      let { username, jobs, error, ...userData } = this.state;
+      let {
+        username,
+        jobs,
+        error,
+        loading,
+        modified,
+        ...userData
+      } = this.state;
       let user = await JoblyApi.updateUser(userData, username);
-      this.setState(st => ({ ...st, ...user }));
+      this.setState(st => ({ ...st, ...user, modified: true }));
     } catch (err) {
+      err = err.map(e => e.replace('instance.', ''));
       this.setState(st => ({
         error: [...st.error, ...err]
       }));
@@ -56,48 +72,71 @@ class Profile extends Component {
   }
 
   render() {
+    if (!this.props.currUser) {
+      return <ErrorHandler error={['You must authenticate first.']} />;
+    }
+    if (this.state.loading) {
+      return <Loading />;
+    }
     return (
-      <div>
-        <h3>Username</h3>
-        <p>{this.state.username}</p>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="first_name">First Name</label>
-          <input
-            type="text"
-            value={this.state.first_name}
-            name="first_name"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="last_name">Last Name</label>
-          <input
-            type="text"
-            value={this.state.last_name}
-            name="last_name"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            value={this.state.email}
-            name="email"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="photo_url">Photo URL</label>
-          <input
-            type="url"
-            value={this.state.photo_url}
-            name="photo_url"
-            onChange={this.handleChange}
-          />
-          <label htmlFor="password">Re-enter Password</label>
-          <input
-            type="password"
-            value={this.state.password}
-            name="password"
-            onChange={this.handleChange}
-          />
-          <button>Save Changes</button>
-        </form>
+      <div className="Profile">
+        <div className="Profile-content">
+          <div className="Profile-username">Username</div>
+          <div className="Profile-name">{this.state.username}</div>
+          <Form onSubmit={this.handleSubmit} className="Profile-form">
+            <FormGroup className="row">
+              <Label htmlFor="first_name">First Name</Label>
+              <Input
+                type="text"
+                value={this.state.first_name}
+                name="first_name"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup className="row">
+              <Label htmlFor="last_name">Last Name</Label>
+              <Input
+                type="text"
+                value={this.state.last_name}
+                name="last_name"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup className="row">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                value={this.state.email}
+                name="email"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup className="row">
+              <Label htmlFor="photo_url">Photo URL</Label>
+              <Input
+                type="url"
+                value={this.state.photo_url}
+                name="photo_url"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <FormGroup className="row">
+              <Label htmlFor="password">Change Password</Label>
+              <Input
+                type="password"
+                value={this.state.password}
+                name="password"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+            <Button className="Profile-button">Save Changes</Button>
+          </Form>
+        </div>
+        {this.state.modified ? (
+          <div className="Profile-updated">Profile Updated</div>
+        ) : (
+          ''
+        )}
         {this.state.error !== '' ? (
           <ErrorHandler error={this.state.error} />
         ) : (

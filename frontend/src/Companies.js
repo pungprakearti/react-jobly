@@ -17,7 +17,7 @@ class Companies extends Component {
       loading: true
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(evt) {
@@ -39,11 +39,14 @@ class Companies extends Component {
   }
 
   /** search for companies */
-  async handleClick(evt) {
+  async handleSubmit(evt) {
+    evt.preventDefault();
+    this.setState({ loading: true });
     try {
       let companies = await JoblyApi.getCompanies(this.state.search);
       this.setState({
-        companies
+        companies,
+        loading: false
       });
     } catch (err) {
       this.setState(st => ({
@@ -63,17 +66,17 @@ class Companies extends Component {
       <div className="Companies">
         <div className="Companies-content">
           <div className="Companies-search row text-center">
-            <Input
-              type="text"
-              value={this.state.search}
-              name="search"
-              placeholder="Enter search term.."
-              onChange={this.handleChange}
-              className="Companies-input"
-            />
-            <Button onClick={this.handleClick} id="Companies-search-button">
-              Search
-            </Button>
+            <form className="row" onSubmit={this.handleSubmit}>
+              <Input
+                type="text"
+                value={this.state.search}
+                name="search"
+                placeholder="Enter search term.."
+                onChange={this.handleChange}
+                className="Companies-input"
+              />
+              <Button id="Companies-search-button">Search</Button>
+            </form>
           </div>
           <div className="row justify-content-center">
             {this.state.companies.length ? (

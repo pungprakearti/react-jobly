@@ -3,6 +3,7 @@ import JoblyApi from './JoblyApi';
 import JobCard from './JobCard';
 import ErrorHandler from './ErrorHandler';
 import { Button, Input } from 'reactstrap';
+import Loading from './Loading';
 
 import './Jobs.css';
 
@@ -12,7 +13,8 @@ class Jobs extends Component {
     this.state = {
       jobs: [],
       search: '',
-      error: []
+      error: [],
+      loading: true
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -23,7 +25,7 @@ class Jobs extends Component {
   async componentDidMount() {
     try {
       let jobs = await JoblyApi.getJobs();
-      this.setState({ jobs });
+      this.setState({ jobs, loading: false });
     } catch (err) {
       this.setState(st => ({
         error: [...st.error, ...err]
@@ -38,10 +40,12 @@ class Jobs extends Component {
   }
 
   /** search for jobs */
-  async handleSearch() {
+  async handleSearch(evt) {
+    evt.preventDefault();
+    this.setState({ loading: true });
     try {
       let jobs = await JoblyApi.getJobs(this.state.search);
-      this.setState({ jobs });
+      this.setState({ jobs, loading: false });
     } catch (err) {
       this.setState(st => ({
         error: [...st.error, ...err]
@@ -51,9 +55,15 @@ class Jobs extends Component {
 
   async handleClick(id) {
     try {
-      await JoblyApi.apply(id);
       let jobIdx = this.state.jobs.findIndex(job => job.id === id);
       let job = this.state.jobs[jobIdx];
+      job.loading = true;
+      this.setState(st => ({
+        jobs: [...st.jobs.slice(0, jobIdx), job, ...st.jobs.slice(jobIdx + 1)]
+      }));
+      await JoblyApi.apply(id);
+
+      job.loading = false;
       job.state = 'applied';
       this.setState(st => ({
         jobs: [...st.jobs.slice(0, jobIdx), job, ...st.jobs.slice(jobIdx + 1)]
@@ -69,21 +79,24 @@ class Jobs extends Component {
     if (this.state.error.length > 0) {
       return <ErrorHandler error={this.state.error} />;
     }
+    if (this.state.loading) {
+      return <Loading />;
+    }
     return (
       <div className="Jobs">
         <div className="Jobs-content">
           <div className="Jobs-search row text-center">
-            <Input
-              type="text"
-              value={this.state.search}
-              name="search"
-              placeholder="Enter search term.."
-              onChange={this.handleChange}
-              className="Jobs-input"
-            />
-            <Button onClick={this.handleSearch} id="Jobs-search-button">
-              Search
-            </Button>
+            <form className="row" onSubmit={this.handleSearch}>
+              <Input
+                type="text"
+                value={this.state.search}
+                name="search"
+                placeholder="Enter search term.."
+                onChange={this.handleChange}
+                className="Jobs-input"
+              />
+              <Button id="Jobs-search-button">Search</Button>
+            </form>
           </div>
           {this.state.jobs.length ? (
             this.state.jobs.map(job => (

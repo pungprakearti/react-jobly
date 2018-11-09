@@ -25,16 +25,23 @@ class JobCard extends Component {
             {this.convSalary(this.props.job.salary)}
           </p>
           <p className="JobCard-equity">
-            {parseInt(this.props.job.equity * 100)}%
+            {parseInt(this.props.job.equity * 100)}%{' '}
+            <span id="JobCard-eqy">EQY</span>
           </p>
         </div>
         <Button
           onClick={() => this.props.handleClick(this.props.job.id)}
-          disabled={this.props.job.state === 'applied'}
+          disabled={this.props.job.state === 'applied' || this.props.loading}
           className="JobCard-button"
           id={this.props.job.state === 'applied' ? '' : 'JobCard-active'}
         >
-          {this.props.job.state === 'applied' ? 'Applied' : 'Apply'}
+          {this.props.job.loading ? (
+            <i class="fas fa-spinner" />
+          ) : this.props.job.state === 'applied' ? (
+            'Applied'
+          ) : (
+            'Apply'
+          )}
         </Button>
       </div>
     );

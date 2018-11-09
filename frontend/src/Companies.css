@@ -19,7 +19,7 @@
 
 .Companies::after {
   content: '';
-  background: url('https://images.pexels.com/photos/34092/pexels-photo.jpg?h=2000');
+  background: url('https://images.pexels.com/photos/443383/pexels-photo-443383.jpeg?h=2000');
   opacity: 0.4;
   top: 0;
   left: 0;
@@ -61,4 +61,11 @@
 
 .Companies-list {
   width: 700px;
+}
+
+.Company-content {
+  display: inline-block;
+  margin-top: 100px;
+  min-height: 100vh;
+  height: 100%;
 }

@@ -33,3 +33,25 @@
   background-color: #66fcf1;
   color: #0b0c10;
 }
+.fas.fa-spinner {
+  animation: loading-spinner infinite 0.5s linear;
+}
+
+@keyframes loading-spinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#JobCard-eqy {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.JobCard-salary,
+.JobCard-equity {
+  font-size: 20px;
+}

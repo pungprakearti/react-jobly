@@ -56,7 +56,11 @@ class Routes extends Component {
       <div>
         <NavBar currUser={this.state.currUser} setCurrUser={this.setCurrUser} />
         <Switch>
-          <Route exact path="/" render={() => <Home />} />
+          <Route
+            exact
+            path="/"
+            render={() => <Home currUser={this.state.currUser} />}
+          />
           <Route exact path="/companies" render={() => <Companies />} />
           <Route
             exact
@@ -71,7 +75,11 @@ class Routes extends Component {
               <Login setCurrUser={this.setCurrUser} {...props} />
             )}
           />
-          <Route exact path="/profile" render={() => <Profile />} />
+          <Route
+            exact
+            path="/profile"
+            render={() => <Profile currUser={this.state.currUser} />}
+          />
           <Route
             render={() => (
               <ErrorHandler
